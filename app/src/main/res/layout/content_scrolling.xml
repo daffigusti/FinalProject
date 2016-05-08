@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".MovieDetail"
+    android:fillViewport="true"
+    tools:showIn="@layout/activity_scrolling">
+
+   <RelativeLayout
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:padding="20dp">
+       <ImageView
+           android:layout_width="150dp"
+           android:layout_height="208dp"
+           android:id="@+id/imageView2"
+           android:layout_alignParentTop="true"
+           android:layout_alignParentLeft="true"
+           android:layout_alignParentStart="true" />
+
+       <LinearLayout
+           android:orientation="vertical"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:layout_alignParentTop="true"
+           android:layout_toRightOf="@+id/imageView2"
+           android:layout_toEndOf="@+id/imageView2"
+           android:layout_alignBottom="@+id/imageView2"
+           android:layout_marginLeft="20dp">
+
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:textAppearance="?android:attr/textAppearanceLarge"
+               android:text="Large Text"
+               android:id="@+id/txt_title"
+               android:textStyle="bold"
+               android:textSize="20dp" />
+
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:textAppearance="?android:attr/textAppearanceLarge"
+               android:text="Large Text"
+               android:id="@+id/txt_year"
+               android:textStyle="bold" />
+
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:textAppearance="?android:attr/textAppearanceMedium"
+               android:text="Medium Text"
+               android:id="@+id/txt_duration" />
+
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:textAppearance="?android:attr/textAppearanceSmall"
+               android:text="Small Text"
+               android:id="@+id/txt_release"
+               android:textStyle="italic" />
+
+       </LinearLayout>
+
+       <LinearLayout
+           android:orientation="vertical"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:layout_below="@+id/imageView2"
+           android:layout_alignParentLeft="true"
+           android:layout_alignParentStart="true"
+           android:layout_marginTop="10dp">
+
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:textAppearance="?android:attr/textAppearanceMedium"
+               android:text="Medium Text"
+               android:id="@+id/txt_sinopsis" />
+
+           <LinearLayout
+               android:orientation="vertical"
+               android:layout_width="match_parent"
+               android:layout_height="match_parent"
+               android:layout_alignParentTop="false"
+               android:layout_alignParentRight="false"
+               android:layout_alignParentEnd="true"
+               android:layout_marginTop="10dp">
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:textAppearance="?android:attr/textAppearanceLarge"
+                   android:text="Trailers:"
+                   android:id="@+id/textView"
+                   android:textStyle="bold" />
+
+               <android.support.v7.widget.RecyclerView
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:id="@+id/listView"
+                   android:scrollbars="none"
+                   tools:listitem="@android:layout/simple_list_item_2" />
+           </LinearLayout>
+       </LinearLayout>
+
+   </RelativeLayout>
+
+</android.support.v4.widget.NestedScrollView>
