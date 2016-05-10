@@ -105,6 +105,29 @@
                    android:scrollbars="none"
                    tools:listitem="@android:layout/simple_list_item_2" />
            </LinearLayout>
+           <LinearLayout
+               android:orientation="vertical"
+               android:layout_width="match_parent"
+               android:layout_height="match_parent"
+               android:layout_alignParentTop="false"
+               android:layout_alignParentRight="false"
+               android:layout_alignParentEnd="true"
+               android:layout_marginTop="10dp">
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:textAppearance="?android:attr/textAppearanceLarge"
+                   android:text="Review:"
+                   android:id="@+id/textView2"
+                   android:textStyle="bold" />
+
+               <android.support.v7.widget.RecyclerView
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:id="@+id/listView_review"
+                   android:scrollbars="none"/>
+           </LinearLayout>
        </LinearLayout>
 
    </RelativeLayout>

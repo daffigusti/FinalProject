@@ -35,15 +35,30 @@ import java.util.List;
 import khadafi.com.finalproject.Adapter.GridViewAdapter;
 import khadafi.com.finalproject.Entity.Favorite;
 
-public class MainActivity extends AppCompatActivity {
+/**
+ * An activity representing a list of MovieItems. This activity
+ * has different presentations for handset and tablet-size devices. On
+ * handsets, the activity presents a list of items, which when touched,
+ * lead to a {@link MovieItemDetailActivity} representing
+ * item details. On tablets, the activity presents the list of items and
+ * item details side-by-side using two vertical panes.
+ */
+public class MovieItemListActivity extends AppCompatActivity {
+
+    /**
+     * Whether or not the activity is in two-pane mode, i.e. running on a tablet
+     * device.
+     */
+    private boolean mTwoPane;
     GridView gv;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_movieitem_list);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         if (getSupportActionBar() != null) {
             ActionBar actionBar = getSupportActionBar();
             actionBar.setTitle("Popular Movies");
@@ -58,11 +73,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        gv = (GridView) findViewById(R.id.movieitem_list);
+        gv= (GridView) findViewById(R.id.movieitem_list);
+        assert gv != null;
 
         FetchMovies fetchMovies = new FetchMovies();
         String url = "http://api.themoviedb.org/3/movie/popular";
         fetchMovies.execute(url);
+
+        if (findViewById(R.id.movieitem_detail_container) != null) {
+            // The detail container view will be present only in the
+            // large-screen layouts (res/values-w900dp).
+            // If this view is present, then the
+            // activity should be in two-pane mode.
+            mTwoPane = true;
+        }
     }
 
     public void setTitle(String title){
@@ -71,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
             actionBar.setTitle(title);
         }
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -128,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
 
     public class FetchMovies extends AsyncTask<String, Void, List<Movie>> {
         private final String LOG_TAG = FetchMovies.class.getSimpleName();
-        final ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
+        final ProgressDialog progressDialog = new ProgressDialog(MovieItemListActivity.this);
         @Override
         protected void onPreExecute() {
 
@@ -227,17 +252,37 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Movie movie = movies.get(position);
-                    Intent intent = new Intent(MainActivity.this,MovieDetail.class);
-                    intent.putExtra("poster_path",movie.getPoster_path());
-                    intent.putExtra("backdrop_path",movie.getBackdrop_path());
-                    intent.putExtra("year",movie.getRelease_date());
-                    intent.putExtra("release",movie.getRelease_date());
-                    intent.putExtra("sinopsis",movie.getOverview());
-                    intent.putExtra("title",movie.getTitle());
-                    intent.putExtra("duration",movie.getVote_average());
-                    intent.putExtra("id",movie.getId());
+                    if (mTwoPane) {
+                        Bundle arguments = new Bundle();
+                        arguments.putString("poster_path",movie.getPoster_path());
+                        arguments.putString("backdrop_path",movie.getBackdrop_path());
+                        arguments.putString("year",movie.getRelease_date());
+                        arguments.putString("release",movie.getRelease_date());
+                        arguments.putString("sinopsis",movie.getOverview());
+                        arguments.putString("title",movie.getTitle());
+                        arguments.putFloat("duration",movie.getVote_average());
+                        arguments.putInt("id",movie.getId());
+                        MovieDetailFragment fragment = new MovieDetailFragment();
+                        fragment.setArguments(arguments);
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.movieitem_detail_container, fragment)
+                                .commit();
+                    } else {
+                        Intent intent = new Intent(MovieItemListActivity.this,MovieItemDetailActivity.class);
+                        intent.putExtra("poster_path",movie.getPoster_path());
+                        intent.putExtra("backdrop_path",movie.getBackdrop_path());
+                        intent.putExtra("year",movie.getRelease_date());
+                        intent.putExtra("release",movie.getRelease_date());
+                        intent.putExtra("sinopsis",movie.getOverview());
+                        intent.putExtra("title",movie.getTitle());
+                        intent.putExtra("duration",movie.getVote_average());
+                        intent.putExtra("id",movie.getId());
 
-                    startActivity(intent);
+                        startActivity(intent);
+                    }
+
+
+
                 }
             });
         }
@@ -245,7 +290,7 @@ public class MainActivity extends AppCompatActivity {
 
     public class FetchMoviesFavorite extends AsyncTask<String, Void, List<Movie>> {
         private final String LOG_TAG = FetchMovies.class.getSimpleName();
-        final ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
+        final ProgressDialog progressDialog = new ProgressDialog(MovieItemListActivity.this);
         @Override
         protected void onPreExecute() {
 
@@ -332,6 +377,7 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             } catch (JSONException e) {
                 e.printStackTrace();
+
             }
             return data;
         }
@@ -347,7 +393,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Movie movie = movies.get(position);
-                    Intent intent = new Intent(MainActivity.this,MovieDetail.class);
+                    Intent intent = new Intent(MovieItemListActivity.this,MovieItemDetailActivity.class);
                     intent.putExtra("poster_path",movie.getPoster_path());
                     intent.putExtra("backdrop_path",movie.getBackdrop_path());
                     intent.putExtra("year",movie.getRelease_date());
@@ -362,4 +408,5 @@ public class MainActivity extends AppCompatActivity {
             });
         }
     }
+
 }

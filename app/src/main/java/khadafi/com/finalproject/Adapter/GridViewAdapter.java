@@ -46,7 +46,6 @@ public class GridViewAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(
                     R.layout.item_poster, parent, false);

@@ -1,0 +1,47 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:baselineAligned="false"
+    android:fitsSystemWindows="true"
+    android:divider="?android:attr/dividerHorizontal"
+    android:orientation="horizontal"
+    android:showDividers="middle"
+    tools:context="khadafi.com.finalproject.MovieItemListActivity">
+
+    <!--
+    This layout is a two-pane layout for the MovieItems
+    master/detail flow.
+    See res/values-large/refs.xml and
+    res/values-w900dp/refs.xml for an example of layout aliases
+    that replace the single-pane version of the layout with
+    this two-pane version.
+
+    For more on layout aliases, see:
+    http://developer.android.com/training/multiscreen/screensizes.html#TaskUseAliasFilters
+    -->
+
+    <GridView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/movieitem_list"
+        android:name="khadafi.com.finalproject.MovieItemListFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:columnWidth="165dp"
+        android:numColumns="auto_fit"
+        tools:context="khadafi.com.finalproject.MovieItemListActivity"
+        tools:listitem="@layout/movieitem_list_content"
+        android:layout_weight="1" />
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/movieitem_detail_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_weight="1" />
+
+</LinearLayout>
