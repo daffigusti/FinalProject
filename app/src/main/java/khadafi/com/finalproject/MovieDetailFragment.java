@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -60,6 +61,8 @@ public class MovieDetailFragment extends Fragment {
     ImageView imageView;
     ImageView imageView2;
 
+    Button btn_favorite;
+
     int movie_id = 0;
 
     public MovieDetailFragment() {
@@ -100,6 +103,8 @@ public class MovieDetailFragment extends Fragment {
         txtTitle = (TextView) rootView.findViewById(R.id.txt_title);
 
         imageView = (ImageView) rootView.findViewById(R.id.img_background);
+        btn_favorite = (Button) rootView.findViewById(R.id.btn_favorite);
+
         imageView2 = (ImageView) rootView.findViewById(R.id.imageView2);
         listView = (RecyclerView) rootView.findViewById(R.id.listView);
         listView_review = (RecyclerView) rootView.findViewById(R.id.listView_review);
@@ -154,9 +159,37 @@ public class MovieDetailFragment extends Fragment {
         if (favorite.size() > 0) {
             if (fab != null) {
                 fab.setImageResource(R.drawable.ic_favorite_white_24dp);
-            }
 
+            }
+            btn_favorite.setEnabled(false);
         }
+
+        btn_favorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<Favorite> favoriteList = Favorite.find(Favorite.class, "movie_id = ?", String.valueOf(movie_id));
+                if (favoriteList.size() <= 0) {
+                    if (fab != null) {
+                        fab.setImageResource(R.drawable.ic_favorite_white_24dp);
+                    }
+                    Favorite favorite_store = new Favorite();
+                    favorite_store.setMovieId(movie_id);
+                    favorite_store.save();
+                    Snackbar.make(v, "This movie has beed add to your favorite", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                    btn_favorite.setEnabled(false);
+                } else {
+                    Favorite single_favorite = favoriteList.get(0);
+                    single_favorite.delete();
+                    if (fab != null) {
+                        fab.setImageResource(R.drawable.ic_favorite_border_white_24dp);
+                    }
+                    Snackbar.make(v, "This movie has beed remove from your favorite", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                    btn_favorite.setEnabled(true);
+                }
+            }
+        });
 
         if (fab != null) {
             fab.setOnClickListener(new View.OnClickListener() {

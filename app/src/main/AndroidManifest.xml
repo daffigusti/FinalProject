@@ -31,7 +31,7 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".MovieDetailActivity" />
         <activity
             android:name=".MovieDetail"
@@ -75,6 +75,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="khadafi.com.finalproject.TestListActivity" />
         </activity>
+        <activity android:name=".AboutActivity"></activity>
     </application>
 
 </manifest>

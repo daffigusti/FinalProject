@@ -60,6 +60,13 @@
                 android:id="@+id/txt_release"
                 android:textStyle="italic" />
 
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mark As Favorite"
+                android:id="@+id/btn_favorite" />
+
         </LinearLayout>
 
         <LinearLayout

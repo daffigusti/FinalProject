@@ -33,15 +33,19 @@
         android:columnWidth="165dp"
         android:numColumns="auto_fit"
         tools:context="khadafi.com.finalproject.MovieItemListActivity"
-        tools:listitem="@layout/movieitem_list_content"
         android:layout_weight="1" />
 
-    <android.support.v4.widget.NestedScrollView
-        android:id="@+id/movieitem_detail_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:layout_weight="1" />
+   <LinearLayout
+       android:layout_weight="1"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent">
+       <android.support.v4.widget.NestedScrollView
+           android:id="@+id/movieitem_detail_container"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:fillViewport="true"
+           app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            />
+   </LinearLayout>
 
 </LinearLayout>

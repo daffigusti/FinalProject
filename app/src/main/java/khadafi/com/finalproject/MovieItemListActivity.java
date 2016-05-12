@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -51,7 +50,7 @@ public class MovieItemListActivity extends AppCompatActivity {
      */
     private boolean mTwoPane;
     GridView gv;
-
+    FloatingActionButton fab;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,14 +63,8 @@ public class MovieItemListActivity extends AppCompatActivity {
             actionBar.setTitle("Popular Movies");
         }
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+
 
         gv= (GridView) findViewById(R.id.movieitem_list);
         assert gv != null;
@@ -85,6 +78,7 @@ public class MovieItemListActivity extends AppCompatActivity {
             // large-screen layouts (res/values-w900dp).
             // If this view is present, then the
             // activity should be in two-pane mode.
+
             mTwoPane = true;
         }
     }
@@ -144,6 +138,9 @@ public class MovieItemListActivity extends AppCompatActivity {
             String url = "";
             setTitle("Favorite Movies");
             fetchMoviesFavorite.execute(url);
+            return true;
+        }else  if(id == R.id.action_about){
+            startActivity(new Intent(this,AboutActivity.class));
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -253,6 +250,7 @@ public class MovieItemListActivity extends AppCompatActivity {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Movie movie = movies.get(position);
                     if (mTwoPane) {
+
                         Bundle arguments = new Bundle();
                         arguments.putString("poster_path",movie.getPoster_path());
                         arguments.putString("backdrop_path",movie.getBackdrop_path());
@@ -366,9 +364,7 @@ public class MovieItemListActivity extends AppCompatActivity {
                         movie.setVote_average(result.getLong("vote_average"));
                         data.add(movie);
                     }
-
                 }
-
             }catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (ProtocolException e) {
@@ -393,17 +389,35 @@ public class MovieItemListActivity extends AppCompatActivity {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Movie movie = movies.get(position);
-                    Intent intent = new Intent(MovieItemListActivity.this,MovieItemDetailActivity.class);
-                    intent.putExtra("poster_path",movie.getPoster_path());
-                    intent.putExtra("backdrop_path",movie.getBackdrop_path());
-                    intent.putExtra("year",movie.getRelease_date());
-                    intent.putExtra("release",movie.getRelease_date());
-                    intent.putExtra("sinopsis",movie.getOverview());
-                    intent.putExtra("title",movie.getTitle());
-                    intent.putExtra("duration",movie.getVote_average());
-                    intent.putExtra("id",movie.getId());
+                    if (mTwoPane) {
 
-                    startActivity(intent);
+                        Bundle arguments = new Bundle();
+                        arguments.putString("poster_path",movie.getPoster_path());
+                        arguments.putString("backdrop_path",movie.getBackdrop_path());
+                        arguments.putString("year",movie.getRelease_date());
+                        arguments.putString("release",movie.getRelease_date());
+                        arguments.putString("sinopsis",movie.getOverview());
+                        arguments.putString("title",movie.getTitle());
+                        arguments.putFloat("duration",movie.getVote_average());
+                        arguments.putInt("id",movie.getId());
+                        MovieDetailFragment fragment = new MovieDetailFragment();
+                        fragment.setArguments(arguments);
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.movieitem_detail_container, fragment)
+                                .commit();
+                    } else {
+                        Intent intent = new Intent(MovieItemListActivity.this,MovieItemDetailActivity.class);
+                        intent.putExtra("poster_path",movie.getPoster_path());
+                        intent.putExtra("backdrop_path",movie.getBackdrop_path());
+                        intent.putExtra("year",movie.getRelease_date());
+                        intent.putExtra("release",movie.getRelease_date());
+                        intent.putExtra("sinopsis",movie.getOverview());
+                        intent.putExtra("title",movie.getTitle());
+                        intent.putExtra("duration",movie.getVote_average());
+                        intent.putExtra("id",movie.getId());
+
+                        startActivity(intent);
+                    }
                 }
             });
         }

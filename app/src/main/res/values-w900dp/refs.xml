@@ -14,5 +14,5 @@
     For more on layout aliases, see:
     http://developer.android.com/training/multiscreen/screensizes.html#TaskUseAliasFilters
     -->
-    <item name="test_list" type="layout">@layout/test_list_twopane</item>
+
 </resources>

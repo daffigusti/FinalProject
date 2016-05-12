@@ -14,6 +14,10 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.List;
+
+import khadafi.com.finalproject.Entity.Favorite;
+
 /**
  * An activity representing a single MovieItem detail screen. This
  * activity is only used narrow width devices. On tablet-size devices,
@@ -31,7 +35,7 @@ public class MovieItemDetailActivity extends AppCompatActivity {
     public static final String TITLE = "title";
     public static final String DURATION = "duration";
     ImageView imageView;
-
+    int movie_id = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +43,7 @@ public class MovieItemDetailActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -67,6 +71,8 @@ public class MovieItemDetailActivity extends AppCompatActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
+            movie_id = getIntent().getIntExtra(MovieItemDetailActivity.MOVIE_ID,0);
+
             arguments.putInt(MovieItemDetailActivity.MOVIE_ID,
                     getIntent().getIntExtra(MovieItemDetailActivity.MOVIE_ID,0));
             arguments.putString(MovieItemDetailActivity.POSTER_PATH,
@@ -96,6 +102,38 @@ public class MovieItemDetailActivity extends AppCompatActivity {
                         .into(imageView);
             }
 
+            final List<Favorite> favorite = Favorite.find(Favorite.class, "movie_id = ?", String.valueOf(movie_id));
+
+            if (favorite.size() > 0) {
+                if (fab != null) {
+                    fab.setImageResource(R.drawable.ic_favorite_white_24dp);
+
+                }
+            }
+
+            if (fab != null) {
+                fab.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        List<Favorite> favoriteList = Favorite.find(Favorite.class, "movie_id = ?", String.valueOf(movie_id));
+                        if (favoriteList.size() <= 0) {
+                            fab.setImageResource(R.drawable.ic_favorite_white_24dp);
+                            Favorite favorite_store = new Favorite();
+                            favorite_store.setMovieId(movie_id);
+                            favorite_store.save();
+                            Snackbar.make(view, "This movie has beed add to your favorite", Snackbar.LENGTH_LONG)
+                                    .setAction("Action", null).show();
+                        } else {
+                            Favorite single_favorite = favoriteList.get(0);
+                            single_favorite.delete();
+                            fab.setImageResource(R.drawable.ic_favorite_border_white_24dp);
+                            Snackbar.make(view, "This movie has beed remove from your favorite", Snackbar.LENGTH_LONG)
+                                    .setAction("Action", null).show();
+                        }
+                    }
+                });
+            }
+
             MovieDetailFragment fragment = new MovieDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
@@ -119,5 +157,11 @@ public class MovieItemDetailActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }

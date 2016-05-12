@@ -6,6 +6,7 @@
     <string name="action_latest">Latest</string>
     <string name="action_upcoming">Upcoming</string>
     <string name="action_now_playing">Now Playing</string>
+    <string name="action_about">About</string>
     <string name="action_favorite">Favorite</string>
     <string name="title_activity_scrolling">ScrollingActivity</string>
     <string name="large_text">
